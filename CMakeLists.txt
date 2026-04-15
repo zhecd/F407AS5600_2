@@ -54,6 +54,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/main.c
     Core/Src/motor_core.c
     Core/Src/robotGeometry.c
+    Core/Src/motion_planner.c
 )
 
 # Add include paths
