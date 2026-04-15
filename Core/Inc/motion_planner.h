@@ -13,19 +13,20 @@ extern "C" {
 // ==============================================================
 
 /**
- * @brief 初始化运动规划器 (同步初始物理坐标)
+ * @brief  初始化运动规划器
+ * @note   由于目前没有正运动学(FK)和绝对编码器，必须在开机时告诉大脑
+ * 机械臂当前所处的初始物理坐标。
+ * @param  start_x, start_y, start_z  开机时机械臂末端的物理坐标
  */
-void Motion_Planner_Init(void);
+void Motion_Planner_Init(float start_x, float start_y, float start_z);
 
 /**
- * @brief  控制机械臂末端移动到指定的物理坐标 (空间直线运动)
- * @param  x            目标 X 坐标 (水平前伸方向，单位: mm)
- * @param  y            目标 Y 坐标 (水平侧边方向，单位: mm)
- * @param  z            目标 Z 坐标 (垂直高度方向，桌面为0，单位: mm)
- * @param  duration_ms  动作预期耗时 (单位: 毫秒)
- * @retval true: 指令生成并成功存入底层队列; false: 队列满或坐标无解
+ * @brief  笛卡尔空间直线插补 (画绝对直线)
+ * @param  target_x, target_y, target_z 目标三维坐标 (mm)
+ * @param  duration_ms                  整条直线的预期耗时 (ms)
+ * @retval true: 执行完成
  */
-bool Motion_Planner_MoveToXYZ(float x, float y, float z, uint32_t duration_ms);
+bool Motion_Planner_MoveLine(float target_x, float target_y, float target_z, uint32_t duration_ms);
 
 #ifdef __cplusplus
 }

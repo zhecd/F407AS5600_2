@@ -104,7 +104,7 @@ int main(void)
   BSP_Stepper_Enable(&Motor_M3, true);// 启用电机3
 
   Motor_Core_Init(); //初始化环形缓冲区
-  Motion_Planner_Init(); // 初始化运动规划器，确保大脑的记忆与物理位置同步
+  Motion_Planner_Init(100.0f, 150.0f, 50.0f);// 告诉大脑机械臂当前的初始物理坐标 (x=0mm, y=150mm, z=50mm)
 
   extern TIM_HandleTypeDef htim6; 
   HAL_TIM_Base_Start_IT(&htim6);// 启动定时器6的中断，开始处理运动帧
@@ -122,12 +122,20 @@ int main(void)
   LedState_t my_pattern[LED_COUNT] = {LED_ON, LED_OFF, LED_ON, LED_OFF};
   BSP_LED_SetAllStates(my_pattern);
 
-  // MotionFrame_t move1 = {3200, 1600, 800, 20000};
-  // Motor_Buffer_Push(&move1);
-  Motion_Planner_MoveToXYZ(150.0f, 100.0f, 50.0f, 2000);
-  HAL_Delay(2500);
+      Motion_Planner_MoveLine(100.0f, 150.0f, 50.0f, 2000); // 耗时2秒
+      HAL_Delay(2500); 
+   
+      Motion_Planner_MoveLine(100.0f, 250.0f, 50.0f, 2000);
+      HAL_Delay(2500);
 
+      Motion_Planner_MoveLine(-100.0f, 250.0f, 50.0f, 4000); // 这段距离长，给4秒
+      HAL_Delay(4500);
 
+      Motion_Planner_MoveLine(-100.0f, 150.0f, 50.0f, 2000);
+      HAL_Delay(2500);
+
+      Motion_Planner_MoveLine(0.0f, 150.0f, 50.0f, 2000);
+      HAL_Delay(2500);
   }
   /* USER CODE END 3 */
 }
