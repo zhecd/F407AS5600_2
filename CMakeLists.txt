@@ -54,12 +54,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/main.c
     Core/Src/motor_core.c
     Core/Src/robotGeometry.c
-    Core/Src/stm32f4xx_hal_msp.c
-    Core/Src/stm32f4xx_it.c
-    Core/Src/syscalls.c
-    Core/Src/sysmem.c
-    Core/Src/system_stm32f4xx.c
-    Core/Src/tim.c
 )
 
 # Add include paths

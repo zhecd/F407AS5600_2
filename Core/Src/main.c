@@ -20,6 +20,7 @@
 #include "main.h"
 #include "bsp_stepper.h"
 #include "bsp_led.h"
+#include "stm32f407xx.h"
 #include "tim.h"
 #include "gpio.h"
 #include "motor_core.h"
@@ -117,10 +118,10 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
   LedState_t my_pattern[LED_COUNT] = {LED_ON, LED_OFF, LED_ON, LED_OFF};
-
   BSP_LED_SetAllStates(my_pattern);
 
-
+  MotionFrame_t move1 = {3200, 1600, 800, 20000};
+  Motor_Buffer_Push(&move1);
 
   }
   /* USER CODE END 3 */
