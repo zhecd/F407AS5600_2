@@ -26,7 +26,7 @@
 #include "motor_core.h"
 #include "robotGeometry.h"
 #include "motion_planner.h"
-//#include "bsp_tmc2209.h"
+#include "bsp_tmc2209.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -104,8 +104,8 @@ int main(void)
   BSP_Stepper_Enable(&Motor_M2, true);// 启用电机2
   BSP_Stepper_Enable(&Motor_M3, true);// 启用电机3
 
-  // extern UART_HandleTypeDef huart6; // 确保声明了你的串口句柄
-  // BSP_TMC2209_InitAll(&huart6);     // 一键注入静音和降热魔法！
+  extern UART_HandleTypeDef huart6; // 确保声明了你的串口句柄
+  BSP_TMC2209_InitAll(&huart6);     // 一键注入静音和降热魔法！
 
   Motor_Core_Init(); //初始化环形缓冲区
   Motion_Planner_Init(0.0f, 185.0f, 240.0f); // 设置初始位置为(0, 185, 240)，即机械臂的默认位置
