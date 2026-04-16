@@ -26,6 +26,7 @@
 #include "motor_core.h"
 #include "robotGeometry.h"
 #include "motion_planner.h"
+#include "bsp_tmc2209.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -103,8 +104,11 @@ int main(void)
   BSP_Stepper_Enable(&Motor_M2, true);// 启用电机2
   BSP_Stepper_Enable(&Motor_M3, true);// 启用电机3
 
+  // extern UART_HandleTypeDef huart6; // 确保声明了你的串口句柄
+  // BSP_TMC2209_InitAll(&huart6);     // 一键注入静音和降热魔法！
+
   Motor_Core_Init(); //初始化环形缓冲区
-  Motion_Planner_Init(100.0f, 150.0f, 50.0f);// 告诉大脑机械臂当前的初始物理坐标 (x=0mm, y=150mm, z=50mm)
+  Motion_Planner_Init(0.0f, 185.0f, 240.0f);// 告诉大脑机械臂当前的初始物理坐标 (x=0mm, y=185mm, z=240mm)
 
   extern TIM_HandleTypeDef htim6; 
   HAL_TIM_Base_Start_IT(&htim6);// 启动定时器6的中断，开始处理运动帧
@@ -122,20 +126,10 @@ int main(void)
   LedState_t my_pattern[LED_COUNT] = {LED_ON, LED_OFF, LED_ON, LED_OFF};
   BSP_LED_SetAllStates(my_pattern);
 
-      Motion_Planner_MoveLine(100.0f, 150.0f, 50.0f, 2000); // 耗时2秒
-      HAL_Delay(2500); 
-   
-      Motion_Planner_MoveLine(100.0f, 250.0f, 50.0f, 2000);
-      HAL_Delay(2500);
+  Motion_Planner_MoveLine(100.0f, 150.0f, 240.0f, 2000); // 走到右下角
+  HAL_Delay(2500);
 
-      Motion_Planner_MoveLine(-100.0f, 250.0f, 50.0f, 4000); // 这段距离长，给4秒
-      HAL_Delay(4500);
 
-      Motion_Planner_MoveLine(-100.0f, 150.0f, 50.0f, 2000);
-      HAL_Delay(2500);
-
-      Motion_Planner_MoveLine(0.0f, 150.0f, 50.0f, 2000);
-      HAL_Delay(2500);
   }
   /* USER CODE END 3 */
 }
