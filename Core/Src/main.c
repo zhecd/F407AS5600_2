@@ -26,7 +26,7 @@
 #include "motor_core.h"
 #include "robotGeometry.h"
 #include "motion_planner.h"
-#include "bsp_tmc2209.h"
+//#include "bsp_tmc2209.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -108,6 +108,7 @@ int main(void)
   // BSP_TMC2209_InitAll(&huart6);     // 一键注入静音和降热魔法！
 
   Motor_Core_Init(); //初始化环形缓冲区
+  Motion_Planner_Init(0.0f, 185.0f, 240.0f); // 设置初始位置为(0, 185, 240)，即机械臂的默认位置
   
 
   extern TIM_HandleTypeDef htim6; 
@@ -126,7 +127,7 @@ int main(void)
   LedState_t my_pattern[LED_COUNT] = {LED_ON, LED_OFF, LED_ON, LED_OFF};
   BSP_LED_SetAllStates(my_pattern);
 
-  Motion_Planner_MoveToXYZ(100.0f, 150.0f, 240.0f, 2000);
+  Motion_Planner_MoveLine(100.0f, 180.0f, 240.0f, 2000);
   HAL_Delay(2500);
 
 
