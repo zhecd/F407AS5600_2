@@ -27,6 +27,7 @@
 #include "robotGeometry.h"
 #include "motion_planner.h"
 #include "bsp_tmc2209.h"
+#include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -95,6 +96,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM6_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   BSP_LED_Init(); // 初始化LED
 
