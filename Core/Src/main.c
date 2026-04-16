@@ -108,7 +108,7 @@ int main(void)
   // BSP_TMC2209_InitAll(&huart6);     // 一键注入静音和降热魔法！
 
   Motor_Core_Init(); //初始化环形缓冲区
-  Motion_Planner_Init(0.0f, 185.0f, 240.0f);// 告诉大脑机械臂当前的初始物理坐标 (x=0mm, y=185mm, z=240mm)
+  
 
   extern TIM_HandleTypeDef htim6; 
   HAL_TIM_Base_Start_IT(&htim6);// 启动定时器6的中断，开始处理运动帧
@@ -126,7 +126,7 @@ int main(void)
   LedState_t my_pattern[LED_COUNT] = {LED_ON, LED_OFF, LED_ON, LED_OFF};
   BSP_LED_SetAllStates(my_pattern);
 
-  Motion_Planner_MoveLine(100.0f, 150.0f, 240.0f, 2000); // 走到右下角
+  Motion_Planner_MoveToXYZ(100.0f, 150.0f, 240.0f, 2000);
   HAL_Delay(2500);
 
 
