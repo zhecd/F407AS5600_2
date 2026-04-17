@@ -80,7 +80,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -139,7 +139,8 @@ int main(void)
 
   Motion_Planner_MoveLine(100.0f, 180.0f, 240.0f, 2000);
   HAL_Delay(2500);
-
+  Motion_Planner_MoveLine(0.0f, 180.0f, 240.0f, 2000);
+  HAL_Delay(2500);
 
   }
   /* USER CODE END 3 */
