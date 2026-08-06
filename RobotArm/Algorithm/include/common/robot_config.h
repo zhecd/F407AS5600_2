@@ -187,7 +187,7 @@ extern "C" {
 #endif
 
 #ifndef PLANNER_SEGMENT_MS
-#define PLANNER_SEGMENT_MS      4U           /* Target segment duration (ms) / 鐩爣鍒嗘鏃堕�?*/
+#define PLANNER_SEGMENT_MS      20U          /* Maximum planned frame duration (ms). */
 #endif
 
 #ifndef MIN_FRAME_TICKS

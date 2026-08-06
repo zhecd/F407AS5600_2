@@ -262,19 +262,22 @@ static bool GenerateOneFrame(void)
         .total_ticks = frame_ticks,
     };
 
-    if (frame.delta_m1 != 0 || frame.delta_m2 != 0 || frame.delta_m3 != 0) {
-        uint32_t steps = RobotMath_MaxAbs3(frame.delta_m1, frame.delta_m2,
-                                           frame.delta_m3);
+    uint32_t steps = RobotMath_MaxAbs3(frame.delta_m1, frame.delta_m2,
+                                       frame.delta_m3);
+    if (steps > 0U) {
         if (steps + FRAME_STEP_MARGIN > frame.total_ticks)
             frame.total_ticks = steps + FRAME_STEP_MARGIN;
         ApplyStepRateLimit(&frame);
-
-        uint32_t remaining = s_move.segments - index;
-        if (remaining < END_SLOW_SEGMENTS)
-            frame.total_ticks += (END_SLOW_SEGMENTS - remaining) *
-                                 STOP_TAIL_EXTRA_TICKS;
-        if (!MotionService_SubmitFrame(&frame)) return false;
     }
+
+    uint32_t remaining = s_move.segments - index;
+    if (remaining < END_SLOW_SEGMENTS)
+        frame.total_ticks += (END_SLOW_SEGMENTS - remaining) *
+                             STOP_TAIL_EXTRA_TICKS;
+
+    /* Zero-step frames are intentional dwell intervals.  Keeping them in
+       the queue preserves the requested feedrate near smoothstep endpoints. */
+    if (!MotionService_SubmitFrame(&frame)) return false;
 
     s_move.previous_tick = cumulative_ticks;
     s_move.generated_m1 = units.rot_units;

@@ -80,10 +80,39 @@ static void TestUnreachableTarget(void)
     assert(!PlanningService_IsBusy());
 }
 
+static void TestSlowLongMoveKeepsItsRequestedDuration(void)
+{
+    ErrorCode_t result;
+    const uint32_t duration_ms = 19444U;
+    uint64_t submitted_ticks = 0U;
+    unsigned int zero_step_frames = 0U;
+
+    ResetMotionStub();
+    assert(PlanningService_Init(HOMEPOSE_X_MM, HOMEPOSE_Y_MM, HOMEPOSE_Z_MM) == ERR_OK);
+    assert(PlanningService_StartLine(28.0f, 233.0f, 160.0f, duration_ms) == ERR_PENDING);
+
+    do {
+        PlanningService_Service();
+    } while (!PlanningService_TakeStartResult(&result));
+    assert(result == ERR_OK);
+
+    while (PlanningService_IsBusy()) PlanningService_Service();
+    assert(s_frame_count == 973U);
+    for (unsigned int i = 0U; i < s_frame_count; ++i) {
+        submitted_ticks += s_frames[i].total_ticks;
+        if (s_frames[i].delta_m1 == 0 && s_frames[i].delta_m2 == 0 &&
+            s_frames[i].delta_m3 == 0)
+            zero_step_frames++;
+    }
+    assert(submitted_ticks >= (uint64_t)duration_ms * TICKS_PER_MS);
+    assert(zero_step_frames > 0U);
+}
+
 int main(void)
 {
     TestPlanningFacade();
     TestUnreachableTarget();
+    TestSlowLongMoveKeepsItsRequestedDuration();
     puts("planning_service_tests: passed");
     return 0;
 }
